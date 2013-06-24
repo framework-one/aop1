@@ -4,7 +4,6 @@
 * @description This is a demo interceptor
 *
 */
-
 component output="false" displayname="BasicInterceptor"  {
 
 	public function init(){
@@ -14,12 +13,19 @@ component output="false" displayname="BasicInterceptor"  {
 
 	//basically it's onMissingMethod!
 	function before(){
-		dump(arguments);
-
+		dump(var=arguments, label="before");
 
 	}
 
 	function after(){
+		dump(var=arguments, label="after");
+	}
 
+	function onMethodCall(){
+		dump(var=arguments, label="onMethod");
+	}
+
+	function onError(){
+		dump(var=arguments, label="onError");
 	}
 }
