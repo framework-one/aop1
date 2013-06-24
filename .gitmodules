@@ -1,0 +1,3 @@
+[submodule "di1"]
+	path = di1
+	url = git@github.com:framework-one/di1.git
