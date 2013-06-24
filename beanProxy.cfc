@@ -1,8 +1,7 @@
 /**
 *
-* @file  /Users/markdrew/Sites/aop1/beanProxy.cfc
 * @author  @markdrew
-* @description I am a bean proxy
+* @description I am a proxy for the beans, means I can run the methods on the interceptor
 *
 */
 

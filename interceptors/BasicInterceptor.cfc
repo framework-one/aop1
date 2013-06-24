@@ -1,8 +1,7 @@
 /**
 *
-* @file  /Users/markdrew/Sites/aop1/interceptors/BasicInterceptor.cfc
-* @author  
-* @description
+* @author   @markdrew
+* @description This is a demo interceptor
 *
 */
 
