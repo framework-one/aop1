@@ -1,3 +1,6 @@
 [submodule "di1"]
 	path = di1
 	url = git@github.com:framework-one/di1.git
+[submodule "fw1"]
+	path = fw1
+	url = git@github.com:framework-one/fw1.git
