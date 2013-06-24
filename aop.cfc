@@ -8,17 +8,20 @@ component {
 
 
 
-	function init(){
-		variables.bf = new ioc(argumentCollection=arguments);
+	function init(string folders, struct config = { }, string iocPath = ""){
+
+		var iocPath = Len(iocPath) ? iocPath & "." : "";
+		var ioc = CreateObject("component", "#iocPath#ioc");
+		var args = duplicate(arguments);
+			StructDelete(args, "iocPath");
+
+		variables.bf = ioc.init(argumentCollection=args);
 
 		//Also need to check if there is a "interceptors" folder, and add these as <componentName>Interceptor
 
 		var InterceptorPath = expandPath("/interceptors");
 		var Interceptors = directoryExists(InterceptorPath) ? directoryList(InterceptorPath,false,"query", "*.cfc") : [];
-		dump(Interceptors);
-		
 
-		abort;
 		return this;
 	}
 
