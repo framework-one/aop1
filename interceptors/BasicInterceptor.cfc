@@ -10,4 +10,16 @@ component output="false" displayname="BasicInterceptor"  {
 	public function init(){
 		return this;
 	}
+
+
+	//basically it's onMissingMethod!
+	function before(){
+		dump(arguments);
+
+
+	}
+
+	function after(){
+
+	}
 }
