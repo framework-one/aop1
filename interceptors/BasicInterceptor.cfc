@@ -13,12 +13,12 @@ component output="false" displayname="BasicInterceptor"  {
 
 	//basically it's onMissingMethod!
 	function before(){
-		dump(var=arguments, label="before");
-
+		arguments.args.1 = "before" & arguments.args.1
 	}
 
 	function after(){
-		dump(var=arguments, label="after");
+		arguments.result = arguments.result & "after";
+		
 	}
 
 	function onMethodCall(){

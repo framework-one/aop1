@@ -9,6 +9,6 @@
 component output="false" displayname="ReverseService"  {
 
 	public function doReverse(String input){
-		return Reverse(input);
+		return Reverse(arguments.input);
 	}
 }
