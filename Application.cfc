@@ -1,7 +1,7 @@
 ﻿// caution: requires FW/1 2.0 Alpha 5 or later!!
 component extends="fw1.org.corfield.framework" {
 
-	this.mappings[ '/goldfish/trumpets' ] = expandPath( '/extrabeans' );
+	
 	function setupApplication() {
 		var bf = new aop( '/services',{}, "di1");
 		setBeanFactory( bf );
@@ -15,18 +15,35 @@ component extends="fw1.org.corfield.framework" {
 
 
 	function AssertHasMethod(object, method, message="", testname=""){
-		Assert(StructKeyExists(object, method), true, "Method #method# doesn't exist in object #getMetaData(object).fullname#", testname);
+		Assert(StructKeyExists(arguments.object, arguments.method), true, "Method #arguments.method# doesn't exist in object #getMetaData(arguments.object).fullname#", arguments.testname);
 	}
 
-	function Assert(expected, actual, message="", testname=""){
+	function Assert(actual,expected , message="", testname=""){
 		param name="request.unittests" default="#[]#";
 
 
-		var utest = {expected:expected,actual:actual, passed:true, message="", testname=testname};
+		var utest = {
+					expected:arguments.expected
+					, actual:arguments.actual
+					, passed:true
+					, message=""
+					, testname=arguments.testname
+					, detail=""};
 
-		if(expected NEQ actual){
+		try{
+
+			if(arguments.expected NEQ arguments.actual){
+				
+				utest.passed = false;
+				utest.message = Len(arguments.message) ? arguments.message : "Expected #arguments.expected# but got #arguments.actual#";
+			}
+		}
+		catch(any e){
 			utest.passed = false;
-			utest.message = Len(message) ? message : "Expected #expected# but got #actual#";
+			utest.message = e.message;
+			utest.actual = "";
+			utest.expected = "";
+			utest.detail = e;
 		}
 
 		ArrayAppend(request.unittests, utest);
