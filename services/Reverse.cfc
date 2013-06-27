@@ -7,10 +7,16 @@
 */
 
 component output="false" displayname="ReverseService"  {
+	param name="request.callstack" default="#[]#";
 
 	public function doReverse(String input){
-		param name="request.callstack" default="#[]#";
 		ArrayAppend(request.callstack, "doReverse");
 		return Reverse(arguments.input);
+	}
+
+	public function doForward(String input){
+		//I double reverse a string... i.e. do nothing!
+		ArrayAppend(request.callstack, "doForward");
+		return Reverse(Reverse(arguments.input));	
 	}
 }

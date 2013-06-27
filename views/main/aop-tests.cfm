@@ -145,6 +145,37 @@
 	AssertEquals(ArrayToList(request.callstack),"aroundA,aroundB,aroundC,doReverse", "After Methods got called in order");
 
 
+
+	//Named Method Interceptions
+
+	request.callstack = []; //reset
+	bf = new aop('/services,/interceptors', {});
+	//add an Interceptor
+	bf.intercept("ReverseService", "BeforeInterceptor", "doReverse");
+
+	rs = bf.getBean("ReverseService");
+
+	Assert(rs.methodMatches("doForward", "doReverse"), false, "Method doForward doesn't match doReverse");
+	Assert(rs.methodMatches("doForward", ""), true, "Method doForward does match ''");
+	Assert(rs.methodMatches("doForward", "doReverse,"), false, "Method doForward doesnt match 'doReverse,'");
+	Assert(rs.methodMatches("doForward", "doReverse,doForward"), true, "Method doForward does match doReverse,doForward");
+	
+
+	result = rs.doReverse("Hello!");
+	
+
+	Assert(result, Reverse("beforeHello!"), "Before Works");
+	Assert(ArrayLen(request.callstack),2, "Two methods registered in call stack");
+	AssertEquals(ArrayToList(request.callstack),"before,doReverse", "Before Called in the stack");
+
+	request.callstack = []; //reset
+	result2 = rs.doForward("Hello!");
+
+
+	Assert(result2, "Hello!", "Before Works");
+	Assert(ArrayLen(request.callstack),1, "One methods registered in call stack");
+	AssertEquals(ArrayToList(request.callstack),"doForward", "Before NOT Called in the stack");
+
 	include "showtests.cfm";
 	dump(request.callstack);
 	abort;
