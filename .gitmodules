@@ -4,6 +4,3 @@
 [submodule "fw1"]
 	path = fw1
 	url = git@github.com:framework-one/fw1.git
-[submodule "coldspring"]
-	path = coldspring
-	url = git://git.code.sf.net/p/coldspring/code
