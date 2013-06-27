@@ -3,22 +3,29 @@ component extends="fw1.org.corfield.framework" {
 
 	
 	function setupApplication() {
-		var bf = new aop( '/services',{}, "di1");
-		setBeanFactory( bf );
+		
 		
 	}
 
 
 	function setupRequest(){
-		setupApplication();
+	
 	}
 
 
-	function AssertHasMethod(object, method, message="", testname=""){
+	function AssertHasMethod(object, method,testname="", message=""){
 		Assert(StructKeyExists(arguments.object, arguments.method), true, "Method #arguments.method# doesn't exist in object #getMetaData(arguments.object).fullname#", arguments.testname);
 	}
 
-	function Assert(actual,expected , message="", testname=""){
+	function AssertTrue(testcase, testname="", message=""){
+		Assert(testcase, true, testname, message);
+	}
+
+	function AssertEquals(actual, expected, testname="", errormessage=""){
+		Assert(actual, expected , testname, errormessage);		
+	}
+
+	function Assert(actual, expected , testname="", errormessage=""){
 		param name="request.unittests" default="#[]#";
 
 
@@ -35,7 +42,7 @@ component extends="fw1.org.corfield.framework" {
 			if(arguments.expected NEQ arguments.actual){
 				
 				utest.passed = false;
-				utest.message = Len(arguments.message) ? arguments.message : "Expected #arguments.expected# but got #arguments.actual#";
+				utest.message = Len(arguments.errormessage) ? arguments.errormessage : "Expected #arguments.expected# but got #arguments.actual#";
 			}
 		}
 		catch(any e){
