@@ -194,8 +194,9 @@
 
 	include "showtests.cfm";
 	dump(request.callstack);
-	abort;
 
-	
-	
+		
 </cfscript>
+<h2>Here's the code for the tests</h2>
+<cf_show template="aop-tests.cfm">
+	
