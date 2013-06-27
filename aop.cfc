@@ -2,7 +2,7 @@
 	I wrap all the functionality of the ioc bean factory and decorate it so that we can use interceptors
 
 */
-component {
+component extends="di1.ioc" {
 
 	variables.bf = ""; // our beanFactory
 
@@ -10,19 +10,13 @@ component {
 
 	variables.proxies = {};
 
-	function init(string folders, struct config = { }, string iocPath = ""){
-
-		var iocPath = Len(arguments.iocPath) ? arguments.iocPath & "." : "";
-		var ioc = CreateObject("component", "#iocPath#ioc");
-		var args = duplicate(arguments);
-			StructDelete(args, "iocPath");
-
-		variables.bf = ioc.init(argumentCollection=args);
+	function init(){
+		super.init(argumentCollection=arguments);
 
 		//Also need to check if there is a "interceptors" folder, and add these as <componentName>Interceptor
 
-		var InterceptorPath = expandPath("/interceptors");
-		var Interceptors = directoryExists(InterceptorPath) ? directoryList(InterceptorPath,false,"query", "*.cfc") : [];
+		//var InterceptorPath = expandPath("/interceptors");
+		//var Interceptors = directoryExists(InterceptorPath) ? directoryList(InterceptorPath,false,"query", "*.cfc") : [];
 
 		return this;
 	}
@@ -67,17 +61,17 @@ component {
 	function getBean(BeanName){
 		//IF it doesn't have Interceptors just call it au-naturel
 		if(!hasInterceptors(arguments.BeanName)){
-			return getIOC().getBean(arguments.BeanName);
+			return super.getBean(arguments.BeanName);
 		}
 		
 		//It has interceptors so return the beanProxy
-		var targetBean = getIOC().getBean(arguments.BeanName);
+		var targetBean = super.getBean(arguments.BeanName);
 
 		//let's go get and instantiate the interceptors!
 		var interceptors= [];
 
 		for(var inter in getInterceptors(arguments.BeanName)){
-			ArrayAppend(interceptors,getIOC().getBean(inter));
+			ArrayAppend(interceptors,super.getBean(inter));
 		}
 		var beanProxy = new beanProxy(targetBean, interceptors);
 
