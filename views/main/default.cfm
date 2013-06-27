@@ -2,6 +2,7 @@
 <cfoutput>
 <ul>
 	<li><a href="#buildURL("main.aop-tests")#">AOP/1 tests</a></li>
+	<li><a href="#buildURL("main.example")#">Logging Example</a></li>
 	<li><a href="#buildURL("main.coldspring")#">Coldspring tests</a></li>
 	<li><a href="#buildURL("main.develop-tests")#">Developer tests</a></li>
 </ul>
