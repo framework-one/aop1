@@ -19,4 +19,10 @@ component output="false" displayname="ReverseService"  {
 		ArrayAppend(request.callstack, "doForward");
 		return Reverse(Reverse(arguments.input));	
 	}
+
+	public function throwError(){
+		//This is just to throw an error
+		ArrayAppend(request.callstack, "throwError");
+		throw("I AM AN EVIL ERROR YOU WANT TO TRAP!");
+	}
 }

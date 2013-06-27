@@ -176,6 +176,22 @@
 	Assert(ArrayLen(request.callstack),1, "One methods registered in call stack");
 	AssertEquals(ArrayToList(request.callstack),"doForward", "Before NOT Called in the stack");
 
+
+
+	//Error TestAssertError
+	request.callstack = []; //reset
+	bf = new aop('/services,/interceptors', {});
+	//add an Interceptor
+	bf.intercept("ReverseService", "ErrorInterceptor", "throwError");
+
+	rs = bf.getBean("ReverseService");
+	rs.throwError();
+
+	Assert(ArrayLen(request.callstack),2, "Two methods registered in call stack");
+	AssertEquals(ArrayToList(request.callstack),"throwError,onError", "Before NOT Called in the stack");
+
+
+
 	include "showtests.cfm";
 	dump(request.callstack);
 	abort;

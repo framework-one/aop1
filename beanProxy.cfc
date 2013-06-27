@@ -46,7 +46,7 @@ component output="false" displayname="beanProxy"  {
 				throw(e);
 			}
 
-			runOnErrorStack(argumentCollection=arguments);
+			runOnErrorStack(arguments.methodName, local.organizedArgs, variables.targetBean, e);
 		}
 		
 		
@@ -173,9 +173,14 @@ component output="false" displayname="beanProxy"  {
 		}
 	}
 
-	private function runOnErrorStack(methodName, args) {
-		
-		return;
+	private function runOnErrorStack(methodName, organizedArgs, targetBean, error) {
+
+		for(var inter in variables.interceptors){
+			if(StructKeyExists(inter.bean, "onError")){
+				result = inter.bean.onError(arguments.methodName, arguments.organizedArgs, arguments.targetBean, arguments.error);
+
+			}
+		}
 	}
 	
 }

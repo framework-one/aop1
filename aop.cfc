@@ -88,11 +88,18 @@ component extends="di1.ioc" {
 
 	function onMissingMethod(methodname, args){
 		//see if we have this method in the beanFactory
-		if(structKeyExists(variables.bf, arguments.methodname)){
-			return variables.bf[arguments.methodname](argumentCollection=arguments.args);
-		}
+
 		
-		throw("Method #methodname# doesn't exist");
+
+			if(structKeyExists(super, arguments.methodname)){
+				return super[arguments.methodname](argumentCollection=arguments.args);
+			}
+
+			
+			
+			throw("Method #methodname# doesn't exist");
+
+
 	}
 
 
