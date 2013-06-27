@@ -33,7 +33,7 @@ The difference now is that the 'Logger' bean's methods will now be called, if it
 
 The "before"  method will be called before the call to doReverse
 The "after" method will be called after the doReverse method has been called
-The "around" method will be called instead of the doReverse method. It is up to you to implement some functionaluty here (see the example (AroundInterceptor|https://github.com/framework-one/aop1/blob/0.1/interceptors/aop/AroundInterceptor.cfc))
+The "around" method will be called instead of the doReverse method. It is up to you to implement some functionaluty here (see the example AroundInterceptor https://github.com/framework-one/aop1/blob/0.1/interceptors/aop/AroundInterceptor.cfc)
 The "onError" method will be called if the "doReverse" method has an error. 
 
 If you want to only trigger an interceptor on certain methods you can add a parameter to the intercept method:
