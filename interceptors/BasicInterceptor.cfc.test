@@ -6,26 +6,34 @@
 */
 component output="false" displayname="BasicInterceptor"  {
 
-	public function init(){
+	this.name = "A";
+
+	public function init(name="A"){
+		this.name = name;
 		return this;
 	}
 
 
 	//basically it's onMissingMethod!
-	function before(){
+	function before(method, args, target){
+		param name="request.callstack" default="#[]#";
+
 		arguments.args.1 = "before" & arguments.args.1
 	}
 
 	function after(){
+		param name="request.callstack" default="#[]#";
 		arguments.result = arguments.result & "after";
 		
 	}
 
-	function onMethodCall(){
+	function onMethod(){
+		param name="request.callstack" default="#[]#";
 		dump(var=arguments, label="onMethod");
 	}
 
 	function onError(){
+		param name="request.callstack" default="#[]#";
 		dump(var=arguments, label="onError");
 	}
 }
