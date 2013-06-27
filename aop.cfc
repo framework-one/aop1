@@ -28,13 +28,18 @@ component extends="di1.ioc" {
 		return variables.bf;
 	}
 
-	function intercept(beanName, interceptorName){
+	function intercept(beanName, interceptorName, methodnames=""){
 
 		if(!StructKeyExists(variables.iStack, arguments.beanName)){
 			variables.iStack[arguments.beanName] = ArrayNew(1);
 		}
 
-		ArrayAppend(variables.iStack[arguments.beanName], arguments.interceptorName);
+		var InterceptionDefinition = {
+				name: arguments.interceptorName,
+				methods : arguments.methodNames
+		};
+
+		ArrayAppend(variables.iStack[arguments.beanName], InterceptionDefinition);
 
 
 		return this;
@@ -71,7 +76,9 @@ component extends="di1.ioc" {
 		var interceptors= [];
 
 		for(var inter in getInterceptors(arguments.BeanName)){
-			ArrayAppend(interceptors,super.getBean(inter));
+
+			var interceptorPacket = {bean:super.getBean(inter.name), methods:inter.methods} ;
+			ArrayAppend(interceptors,interceptorPacket);
 		}
 		var beanProxy = new beanProxy(targetBean, interceptors);
 
