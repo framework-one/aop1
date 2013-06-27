@@ -27,10 +27,7 @@ component output="false" displayname="beanProxy"  {
 			
 			if(!hasAround()){
 				runBeforeStack(arguments.methodName, organizedArgs, variables.targetBean);
-				//runOnMethodCallStack(argumentCollection=arguments);
-				//if there isn't a onMethod, original call
 				result = variables.targetBean[arguments.methodName](argumentCollection=organizedArgs);
-			//arguments.result = results;
 				runAfterStack(local.result , arguments.methodName, local.organizedArgs, variables.targetBean);
 
 			}
@@ -38,19 +35,13 @@ component output="false" displayname="beanProxy"  {
 				result = runAroundStack(arguments.methodName, local.organizedArgs, variables.targetBean);
 			}
 
-			
 			return result;
 		}catch(Any e){
 
-			if(!hasErrorStack()){
-				throw(e);
-			}
+			if(!hasErrorStack()){ throw(e); }
 
 			runOnErrorStack(arguments.methodName, local.organizedArgs, variables.targetBean, e);
 		}
-		
-		
-		//return results;
 	}
 
 	private function cleanupArguments(methodName, args){
@@ -71,6 +62,9 @@ component output="false" displayname="beanProxy"  {
 		return organizedArgs;
 	}
 
+/*
+	SEARCHING functions
+*/
 	private function hasAround(){
 		for(var inter in variables.interceptors){
 			if(StructKeyExists(inter.bean, "around")){
@@ -91,7 +85,18 @@ component output="false" displayname="beanProxy"  {
 		return false;
 	}
 
-
+	private function getAroundInterceptorCount(){
+		var total = 0;
+		for(var inter in variables.interceptors){
+			if(StructKeyExists(inter.bean, "around")){
+				total++
+			}
+		}
+		return total;
+	}
+/*
+	Functions that run all the interceptors
+*/	
 
 
 	private function runBeforeStack(methodName, args, targetBean){
@@ -106,7 +111,58 @@ component output="false" displayname="beanProxy"  {
 		}
 	}
 
+	private function runAroundStack(methodName, args, targetBean) {
+		var result = "";
+		var totalInterceptors = getAroundInterceptorCount();
 
+		//count around intercept
+		var hitCount = 1;
+	
+		for(var inter in variables.interceptors){
+			if(StructKeyExists(inter.bean, "around")){
+				if(!methodMatches(arguments.methodName, inter.methods)){
+					continue;
+				}
+				if(hitCount EQ totalInterceptors){
+					inter.bean.last = true;
+				}
+				else{
+					inter.bean.last = false;
+					
+				}
+				result = inter.bean.around(arguments.methodName, arguments.args, arguments.targetBean);
+				hitCount++;
+				
+			}
+		}
+		
+		return result;
+	}
+
+	private function runAfterStack(result, methodName, args, targetBean) {
+		for(var inter in variables.interceptors){
+			if(StructKeyExists(inter.bean, "after")){
+				if(!methodMatches(arguments.methodName, inter.methods)){
+					continue;
+				}
+
+				var retvar = inter.bean.after(arguments.result, arguments.methodName, arguments.args, arguments.targetBean);
+			}
+		}
+	}
+
+	private function runOnErrorStack(methodName, organizedArgs, targetBean, error) {
+
+		for(var inter in variables.interceptors){
+			if(StructKeyExists(inter.bean, "onError")){
+				if(!methodMatches(arguments.methodName, inter.methods)){
+					continue;
+				}
+				result = inter.bean.onError(arguments.methodName, arguments.organizedArgs, arguments.targetBean, arguments.error);
+
+			}
+		}
+	}
 	
 	public boolean function methodMatches (methodName, matchers) output=false{
 		
@@ -129,58 +185,9 @@ component output="false" displayname="beanProxy"  {
 	
 	
 
-	private function getAroundInterceptorCount(){
-		var total = 0;
-		for(var inter in variables.interceptors){
-			if(StructKeyExists(inter.bean, "around")){
-				total++
-			}
-		}
-		return total;
-	}
+	
 
 	 
-	private function runAroundStack(methodName, args, targetBean) {
-		var result = "";
-		var totalInterceptors = getAroundInterceptorCount();
-
-		//count around intercept
-		var hitCount = 1;
 	
-		for(var inter in variables.interceptors){
-			if(StructKeyExists(inter.bean, "around")){
-				
-				if(hitCount EQ totalInterceptors){
-					inter.bean.last = true;
-				}
-				else{
-					inter.bean.last = false;
-					
-				}
-				result = inter.bean.around(arguments.methodName, arguments.args, arguments.targetBean);
-				hitCount++;
-			}
-		}
-		
-		return result;
-	}
-
-	private function runAfterStack(result, methodName, args, targetBean) {
-		for(var inter in variables.interceptors){
-			if(StructKeyExists(inter.bean, "after")){
-				var retvar = inter.bean.after(arguments.result, arguments.methodName, arguments.args, arguments.targetBean);
-			}
-		}
-	}
-
-	private function runOnErrorStack(methodName, organizedArgs, targetBean, error) {
-
-		for(var inter in variables.interceptors){
-			if(StructKeyExists(inter.bean, "onError")){
-				result = inter.bean.onError(arguments.methodName, arguments.organizedArgs, arguments.targetBean, arguments.error);
-
-			}
-		}
-	}
 	
 }
