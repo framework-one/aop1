@@ -38,7 +38,7 @@ The "onError" method will be called if the "doReverse" method has an error.
 
 If you want to only trigger an interceptor on certain methods you can add a parameter to the intercept method:
 
-		bf.intercept("ReverseService","Logger", "doReverse,doOtherThing");
+	bf.intercept("ReverseService","Logger", "doReverse,doOtherThing");
 
 
-Check out the wiki for more complete documentation (AOP/1 WIki)[https://github.com/framework-one/aop1/wiki/]
+Check out the wiki for more complete documentation https://github.com/framework-one/aop1/wiki/
