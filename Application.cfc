@@ -22,7 +22,7 @@ component extends="fw1.org.corfield.framework" {
 	}
 
 	function AssertEquals(actual, expected, testname="", errormessage=""){
-		Assert(actual, expected , testname, errormessage);		
+		Assert(arguments.actual, arguments.expected , arguments.testname, arguments.errormessage);		
 	}
 
 	function Assert(actual, expected , testname="", errormessage=""){
