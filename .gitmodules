@@ -4,3 +4,6 @@
 [submodule "fw1"]
 	path = fw1
 	url = git@github.com:framework-one/fw1.git
+[submodule "mxunit"]
+	path = mxunit
+	url = git@github.com:mxunit/mxunit.git
