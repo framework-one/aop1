@@ -1,17 +1,17 @@
 <h1>Logging Example</h1>
 
-<cfscript>
+
+<h2>Wiring Code</h2>
+<cf_show template="code/examples.cfm" include="true">
+
+
+<h2>The ReverseService (/services/Reverse.cfc)</h2>
+
+<cf_show template="/services/Reverse.cfc">
+
 	
-	//Normal Setup
-	bf = new aop("/services,/interceptors/example");
-	bf.intercept("ReverseService","Logger");
-	rs = bf.getBean("ReverseService");
-		
+<h2>The Interceptor (/interceptors/example/Logger.cfc)</h2>
+<cf_show template="/interceptors/example/Logger.cfc">
 
-
-
-	result = rs.doReverse("This is being logged now!");
-	dump(result);
-	
-</cfscript>
-
+<h2>The LogService it uses (/services/Log.cfc)</h2>
+<cf_show template="/services/Log.cfc">	

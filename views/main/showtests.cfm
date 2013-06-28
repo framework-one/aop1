@@ -10,7 +10,7 @@
 
 </style>
 <cfoutput>
-<table>
+<table cellpadding="2" cellspacing="2" border="1">
 	<thead>
 		<th>Passed?</th>
 		<th>Name</th>

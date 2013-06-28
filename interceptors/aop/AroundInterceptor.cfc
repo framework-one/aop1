@@ -19,7 +19,7 @@ component output="false" displayname="AroundInterceptor"  {
 	}
 
 	function isLast(){
-		return this.last ?: false;
+		return this.last ? this.last : false;
 	}
 
 }

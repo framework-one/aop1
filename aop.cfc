@@ -1,6 +1,17 @@
 /*
-	I wrap all the functionality of the ioc bean factory and decorate it so that we can use interceptors
+	Copyright (c) 2013, Mark Drew
 
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
 */
 component extends="di1.ioc" {
 
@@ -85,22 +96,5 @@ component extends="di1.ioc" {
 		return beanProxy ;
 
 	}
-
-	function onMissingMethod(methodname, args){
-		//see if we have this method in the beanFactory
-
-		
-
-			if(structKeyExists(super, arguments.methodname)){
-				return super[arguments.methodname](argumentCollection=arguments.args);
-			}
-
-			
-			
-			throw("Method #methodname# doesn't exist");
-
-
-	}
-
 
 }
