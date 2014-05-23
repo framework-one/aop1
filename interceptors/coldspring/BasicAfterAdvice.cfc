@@ -1,14 +1,14 @@
 /**
 *
 * @file  /Users/markdrew/Sites/aop1/interceptors/BasicAfterAdvice.cfc
-* @author  
+* @author
 * @description
 *
 */
 
-component output="false" extends="coldspring.aop.AfterReturningAdvice" {
+component output="false" {
 
-	
+
 
 	function AfterReturning(returnVal, method, args, target){
 		ArrayAppend(request.callstack, "after");

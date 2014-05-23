@@ -1,4 +1,4 @@
-component output="false" extends="coldspring.aop.BeforeAdvice"{
+component output="false" {
 
 	this.name = "before";
 	function init(name="before"){

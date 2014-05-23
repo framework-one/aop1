@@ -1,15 +1,15 @@
 /**
 *
 * @file  /Users/markdrew/Sites/aop1/interceptors/BasicAroundAdvice.cfc
-* @author  
+* @author
 * @description
 *
 */
 
-component output="false" extends="coldspring.aop.MethodInterceptor"  {
+component output="false" {
 
 	public function invokeMethod(methodInvocation){
-		
+
 		ArrayAppend(request.callstack, "around2");
 		return methodInvocation.proceed();
 	}

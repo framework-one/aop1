@@ -1,11 +1,11 @@
 /**
 *
-* @author  
+* @author
 * @description
 *
 */
 
-component output="false" extends="coldspring.aop.MethodInterceptor"  {
+component output="false" {
 
 	this.name = "around";
 	function init(name="around"){
@@ -13,7 +13,7 @@ component output="false" extends="coldspring.aop.MethodInterceptor"  {
 	}
 
 	public function invokeMethod(methodInvocation){
-		
+
 		ArrayAppend(request.callstack, this.name);
 		return methodInvocation.proceed();
 	}

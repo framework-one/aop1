@@ -7,14 +7,14 @@ component extends="mxunit.framework.TestCase"{
 			request.callstack = []; //reset
 			bf = new aop('/services,/interceptors', {});
 			//add an Interceptor
-			
+
 			bf.intercept("ReverseService", "BeforeInterceptor");
 			bf.intercept("ReverseService", "AroundInterceptor");
 			bf.intercept("ReverseService", "AfterInterceptor");
 
 			rs = bf.getBean("ReverseService");
 			result = rs.doReverse("Hello!");
-			
+
 
 			AssertEquals(result, Reverse("Hello!"));
 			AssertEquals(ArrayLen(request.callstack),2);
@@ -34,14 +34,14 @@ component extends="mxunit.framework.TestCase"{
 		bf.intercept("ReverseService", "BeforeInterceptorA");
 		bf.intercept("ReverseService", "BeforeInterceptorB");
 		bf.intercept("ReverseService", "BeforeInterceptorC");
-		
+
 		rs = bf.getBean("ReverseService");
 		result = rs.doReverse("Hello!");
 
 		AssertEquals(result, Reverse("beforebeforebeforeHello!"));
 		AssertEquals(ArrayLen(request.callstack),4);
 		AssertEquals(ArrayToList(request.callstack),"beforeA,beforeB,beforeC,doReverse");
-		
+
 	}
 
 	function TestMiltipleAfterInterceptors(){
@@ -102,10 +102,10 @@ component extends="mxunit.framework.TestCase"{
 		AssertEquals(rs.methodMatches("doForward", ""), true);
 		AssertEquals(rs.methodMatches("doForward", "doReverse,"), false);
 		AssertEquals(rs.methodMatches("doForward", "doReverse,doForward"), true);
-		
+
 
 		result = rs.doReverse("Hello!");
-		
+
 		AssertEquals(result, Reverse("beforeHello!"));
 		AssertEquals(ArrayLen(request.callstack),2);
 		AssertEquals(ArrayToList(request.callstack),"before,doReverse");
@@ -114,8 +114,14 @@ component extends="mxunit.framework.TestCase"{
 
 
 	public function TestOnErrorInterceptors() {
-	
+
 		request.callstack = []; //reset
+		bf = new aop('/services,/interceptors', {});
+		//add an Interceptor
+		bf.intercept("ReverseService", "ErrorInterceptor", "throwError");
+
+		rs = bf.getBean("ReverseService");
+
 		result2 = rs.doForward("Hello!");
 
 
@@ -128,7 +134,6 @@ component extends="mxunit.framework.TestCase"{
 		//add an Interceptor
 		bf.intercept("ReverseService", "ErrorInterceptor", "throwError");
 
-		rs = bf.getBean("ReverseService");
 		rs.throwError();
 
 		AssertEquals(ArrayLen(request.callstack),2);

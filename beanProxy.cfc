@@ -16,38 +16,40 @@
 component output="false" displayname="beanProxy"  {
 
 	variables.interceptors = [];
-	variables.targetBean = ""; //the actual bean 
+	variables.targetBean = ""; //the actual bean
 	variables.methodList = ""; //A list of methods. if blank defaults to * (which means all);
-	
+
 
 	function init(Component targetBean, Array interceptors = []){
 		variables.targetBean = arguments.targetBean;
 		variables.interceptors = arguments.interceptors;
 	}
 
-	public function onMissingMethod(methodName,args){
+	public function onMissingMethod(missingMethodName,missingMethodArguments){
 
 
-		var organizedArgs = cleanupArguments(arguments.methodName,arguments.args);
+		var organizedArgs = cleanupArguments(arguments.missingMethodName,arguments.missingMethodArguments);
 		var result = "";
 		try{
-			
+
 			if(!hasAround()){
-				runBeforeStack(arguments.methodName, organizedArgs, variables.targetBean);
-				result = variables.targetBean[arguments.methodName](argumentCollection=organizedArgs);
-				runAfterStack(local.result , arguments.methodName, local.organizedArgs, variables.targetBean);
+				runBeforeStack(arguments.missingMethodName, organizedArgs, variables.targetBean);
+				result = evaluate("variables.targetBean.#arguments.missingMethodName#(argumentCollection=organizedArgs)");
+				runAfterStack(local.result , arguments.missingMethodName, local.organizedArgs, variables.targetBean);
 
 			}
 			else{
-				result = runAroundStack(arguments.methodName, local.organizedArgs, variables.targetBean);
+				result = runAroundStack(arguments.missingMethodName, local.organizedArgs, variables.targetBean);
 			}
 
 			return result;
 		}catch(Any e){
 
-			if(!hasErrorStack()){ throw(e); }
+			if(!hasErrorStack()){
+				rethrow;
+			}
 
-			runOnErrorStack(arguments.methodName, local.organizedArgs, variables.targetBean, e);
+			runOnErrorStack(arguments.MissingMethodName, local.organizedArgs, variables.targetBean, e);
 		}
 	}
 
@@ -56,7 +58,7 @@ component output="false" displayname="beanProxy"  {
 		var positionCount = 1;
 		var p = "";
 		var targetArgInfo = getMetaData(variables.targetBean[arguments.methodName]).parameters;
-		loop collection="#arguments.args#" item="p"{
+		for (p in arguments.args) {
 			//They are usually numeric here
 			var keyName = positionCount;
 			if(isNumeric(p) && p LTE ArrayLen(targetArgInfo)){
@@ -87,7 +89,7 @@ component output="false" displayname="beanProxy"  {
 		for(var inter in variables.interceptors){
 			if(StructKeyExists(inter.bean, "onError")){
 				return true;
-			}	
+			}
 		}
 		return false;
 	}
@@ -96,14 +98,14 @@ component output="false" displayname="beanProxy"  {
 		var total = 0;
 		for(var inter in variables.interceptors){
 			if(StructKeyExists(inter.bean, "around")){
-				total++
+				total++;
 			}
 		}
 		return total;
 	}
 /*
 	Functions that run all the interceptors
-*/	
+*/
 
 
 	private function runBeforeStack(methodName, args, targetBean){
@@ -124,7 +126,7 @@ component output="false" displayname="beanProxy"  {
 
 		//count around intercept
 		var hitCount = 1;
-	
+
 		for(var inter in variables.interceptors){
 			if(StructKeyExists(inter.bean, "around")){
 				if(!methodMatches(arguments.methodName, inter.methods)){
@@ -135,14 +137,14 @@ component output="false" displayname="beanProxy"  {
 				}
 				else{
 					inter.bean.last = false;
-					
+
 				}
 				result = inter.bean.around(arguments.methodName, arguments.args, arguments.targetBean);
 				hitCount++;
-				
+
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -170,31 +172,22 @@ component output="false" displayname="beanProxy"  {
 			}
 		}
 	}
-	
+
 	public boolean function methodMatches (methodName, matchers) output=false{
-		
+
 		//Empty list
 		if(!ListLen(arguments.matchers)){
 			return true;
 		}
-		
+
 		if(arguments.methodName EQ arguments.matchers){
 			return true;
 		}
 
-	
 		if(listFindNoCase(arguments.matchers, arguments.methodName, ",", false)){
-
 			return true;
 		}
 		return false;
 	}
-	
-	
 
-	
-
-	 
-	
-	
 }

@@ -1,4 +1,4 @@
-component output="false" extends="coldspring.aop.BeforeAdvice"{
+component output="false" {
 
 
 	function before(method,args,target){

@@ -1,12 +1,12 @@
 /**
 *
 * @file  /Users/markdrew/Sites/aop1/interceptors/BasicAfterAdvice.cfc
-* @author  
+* @author
 * @description
 *
 */
 
-component output="false" extends="coldspring.aop.AfterReturningAdvice" {
+component output="false" {
 
 	this.name = "after";
 	function init(name="after"){

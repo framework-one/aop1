@@ -1,5 +1,5 @@
 component output="false" displayname="AroundInterceptor"  {
-	
+
 	this.name = "around";
 	function init(name="around"){
 		this.name=name;
@@ -13,7 +13,7 @@ component output="false" displayname="AroundInterceptor"  {
 
 	function proceed(method,args,target){
 		if(isLast()){
-			return target[method](argumentCollection=args);	
+			return evaluate("arguments.target.#method#(argumentCollection=args)");
 		}
 		return "";
 	}

@@ -22,7 +22,7 @@ component extends="di1.ioc" {
 	variables.proxies = {};
 
 	function init(){
-		super.init(argumentCollection=arguments);
+		variables.bf = super.init(argumentCollection=arguments);
 
 		//Also need to check if there is a "interceptors" folder, and add these as <componentName>Interceptor
 
@@ -46,8 +46,8 @@ component extends="di1.ioc" {
 		}
 
 		var InterceptionDefinition = {
-				name: arguments.interceptorName,
-				methods : arguments.methodNames
+				name = arguments.interceptorName,
+				methods = arguments.methodNames
 		};
 
 		ArrayAppend(variables.iStack[arguments.beanName], InterceptionDefinition);
@@ -79,21 +79,21 @@ component extends="di1.ioc" {
 		if(!hasInterceptors(arguments.BeanName)){
 			return super.getBean(arguments.BeanName);
 		}
-		
+
 		//It has interceptors so return the beanProxy
 		var targetBean = super.getBean(arguments.BeanName);
 
 		//let's go get and instantiate the interceptors!
-		var interceptors= [];
+		var interceptors = [];
 
 		for(var inter in getInterceptors(arguments.BeanName)){
 
-			var interceptorPacket = {bean:super.getBean(inter.name), methods:inter.methods} ;
+			var interceptorPacket = {bean=super.getBean(inter.name), methods=inter.methods} ;
 			ArrayAppend(interceptors,interceptorPacket);
 		}
 		var beanProxy = new beanProxy(targetBean, interceptors);
 
-		return beanProxy ;
+		return beanProxy;
 
 	}
 

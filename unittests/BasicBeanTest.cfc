@@ -5,7 +5,7 @@ component extends="mxunit.framework.TestCase"{
 		request.callstack = [];
 		bf = new aop('/services', {});
 		rs = bf.getBean("ReverseService");
-		
+
 		//Basic Bean Tests
 		result = rs.doReverse("Hello!");
 		AssertEquals("!olleH", result);
@@ -22,13 +22,13 @@ component extends="mxunit.framework.TestCase"{
 		//add an Interceptor
 		bf.intercept("ReverseService", "BeforeInterceptor");
 		rs = bf.getBean("ReverseService");
-		
+
 		result = rs.doReverse("Hello!");
 		AssertEquals(result, Reverse("beforeHello!"), "Before Works");
 		AssertEquals(ArrayLen(request.callstack),2);
 		AssertEquals(ArrayToList(request.callstack),"before,doReverse");
 	}
-	
+
 	function TestAfterInterceptors(){
 		//AfterAdvice Tests
 		request.callstack = []; //reset
@@ -38,7 +38,7 @@ component extends="mxunit.framework.TestCase"{
 		rs = bf.getBean("ReverseService");
 		result = rs.doReverse("Hello!");
 
-		AssertEquals(result, Reverse("Hello!") , "Reverse still Works");	
+		AssertEquals(result, Reverse("Hello!") , "Reverse still Works");
 		AssertEquals(ArrayLen(request.callstack),2);
 		AssertEquals(ArrayToList(request.callstack),"doReverse,after");
 	}
@@ -60,5 +60,5 @@ component extends="mxunit.framework.TestCase"{
 		AssertEquals(ArrayToList(request.callstack),"around,doReverse");
 	}
 
-	
+
 }

@@ -13,14 +13,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-component extends="fw1.org.corfield.framework" {	
+component extends="fw1.org.corfield.framework" {
 	//Current Assertions, TODO:replace with MXUnit tests
 
 	variables.framework = {
-
 		unhandledPaths="/mxunit"
-	}
-
+	};
 
 	function AssertHasMethod(object, method,testname="", message=""){
 		Assert(StructKeyExists(arguments.object, arguments.method), true, "Method #arguments.method# doesn't exist in object #getMetaData(arguments.object).fullname#", arguments.testname);
@@ -31,7 +29,7 @@ component extends="fw1.org.corfield.framework" {
 	}
 
 	function AssertEquals(actual, expected, testname="", errormessage=""){
-		Assert(arguments.actual, arguments.expected , arguments.testname, arguments.errormessage);		
+		Assert(arguments.actual, arguments.expected , arguments.testname, arguments.errormessage);
 	}
 
 	function Assert(actual, expected , testname="", errormessage=""){
@@ -39,9 +37,9 @@ component extends="fw1.org.corfield.framework" {
 
 
 		var utest = {
-					expected:arguments.expected
-					, actual:arguments.actual
-					, passed:true
+					expected=arguments.expected
+					, actual=arguments.actual
+					, passed=true
 					, message=""
 					, testname=arguments.testname
 					, detail=""};
@@ -49,7 +47,7 @@ component extends="fw1.org.corfield.framework" {
 		try{
 
 			if(arguments.expected NEQ arguments.actual){
-				
+
 				utest.passed = false;
 				utest.message = Len(arguments.errormessage) ? arguments.errormessage : "Expected #arguments.expected# but got #arguments.actual#";
 			}
